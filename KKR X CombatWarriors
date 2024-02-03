@@ -1,0 +1,110 @@
+game.StarterGui:SetCore("SendNotification", {
+    Title = "KKR HUB";
+    Text = "ใช้งานด้วยมือถือ";
+    Icon = "rbxassetid://13474640049";
+    Duration = "3";
+    print("มือถือ")
+})
+Wait(3)
+game.StarterGui:SetCore("SendNotification", {
+    Title = "KKR HUB";
+    Text = "เปิด Ui เรียบร้อย";
+    Icon = "rbxassetid://13440863336";
+    Duration = "3";
+    print("KKR HUB")
+})
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("KKR HUB", "DarkTheme")
+
+local Tab = Window:NewTab("โปร")
+local Section = Tab:NewSection("KKR HUB")
+
+Section:NewButton("Auto parry", "By.KKR HUB", function()
+	game.StarterGui:SetCore("SendNotification", {
+		Title = "KKR HUB";
+		Text = "เปิด โปรรร!!";
+		Icon = "rbxassetid://13867768098";
+		Duration = "3";
+        print("เปิด Auto parry")
+	})
+    local lp = game.Players.LocalPlayer
+    
+    local animationInfo = {}
+    --Section
+    function getInfo(id)
+      local success, info = pcall(function()
+          return game:GetService("MarketplaceService"):GetProductInfo(id)
+      end)
+      if success then
+          return info
+      end
+      return {Name=''}
+    end
+    function block(player)
+      keypress(0x46)
+      wait()
+      keyrelease(0x46)
+    end
+    
+    local AnimNames = {
+      'Slash',
+      'Swing',
+      'Sword'
+    }
+    
+    function playerAdded(v)
+        local function charadded(char)
+          local humanoid = char:WaitForChild("Humanoid", 5)
+          if humanoid then
+              humanoid.AnimationPlayed:Connect(function(track)
+                  local info = animationInfo[track.Animation.AnimationId]
+                  if not info then
+                      info = getInfo(tonumber(track.Animation.AnimationId:match("%d+")))
+                      animationInfo[track.Animation.AnimationId] = info
+                  end
+                 
+                  if (lp.Character and lp.Character:FindFirstChild("Head") and v.Character:FindFirstChild("Head")) then
+                      local mag = (v.Character.Head.Position - lp.Character.Head.Position).Magnitude
+                      if mag < 15  then
+                         
+                          for _, animName in pairs(AnimNames) do
+                              if info.Name:match(animName) then
+                                  pcall(block, v)
+                              end
+                          end
+                         
+                      end
+                  end
+              end)
+          end
+      end
+     
+      if v.Character then
+          charadded(v.Character)
+      end
+      v.CharacterAdded:Connect(charadded)
+    end
+    
+    for i,v in pairs(game.Players:GetPlayers()) do
+       if v ~= lp then
+           playerAdded(v)
+       end
+    end
+    
+    game.Players.PlayerAdded:Connect(playerAdded)
+    end)
+
+    local Tab = Window:NewTab("ตั้งค่า")
+    local Section = Tab:NewSection("By.KKR HUB")
+    Section:NewButton("วิดิโอ youtube ของเรา", "ฝากดูด้วยนะ", function()
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "KKR HUB";
+            Text = "ขอบคุณ";
+            Icon = "rbxassetid://13440863336";
+            Duration = "3";
+            print("KKRHUB ขอบคุณ")
+        })
+        setclipboard("https://youtu.be/YCzJanwBWxo?si=xbKkp6l6pZTr4F_s")
+      end)
+      
+    local Section = Tab:NewSection("V 1.0")
